@@ -24,7 +24,7 @@ impl CalibrationValuesSummator {
             }
         }
     }
-    pub fn finish(&mut self) -> u64 {
+    pub fn finish(mut self) -> u64 {
         self.eol();
         self.accu
     }
