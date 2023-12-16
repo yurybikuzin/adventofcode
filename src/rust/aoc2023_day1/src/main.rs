@@ -1,27 +1,28 @@
+use anyhow::*;
 use aoc2023_day1::*;
 
-fn main() {
+#[tokio::main]
+async fn main() -> Result<()> {
     println!(
-        "answer: {}",
+        "one_liner answer: {}",
         one_liner::sum_of_all_of_the_calibration_values(PUZZLE_INPUT)
     );
-}
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    const FOR_EXAMPLE: &str = r#"1abc2
-    pqr3stu8vwx
-    a1b2c3d4e5f
-    treb7uchet"#;
-
-    #[test]
-    fn test_one_liner() {
-        let eta = 142;
-        let tst = one_liner::sum_of_all_of_the_calibration_values(FOR_EXAMPLE);
-        assert_eq!(tst, eta);
+    {
+        let url = "https://u2h.ru/aoc2023_day1_input.txt"; // original "https://adventofcode.com/2023/day/1/input" is unreachable due to authorization required
+        let mut response = reqwest::get(url)
+            .await
+            .map_err(|err| anyhow!(err))
+            .and_then(|resp| resp.error_for_status().map_err(|err| anyhow!(err)))
+            .map_err(|err| anyhow!("{url:?}: {err}"))?;
+        let mut summator = summator::CalibrationValuesSummator::default();
+        while let Some(chunk) = response.chunk().await? {
+            summator.feed(&chunk);
+        }
+        println!("summator answer: {}", summator.finish());
     }
+
+    Ok(())
 }
 
 const PUZZLE_INPUT: &str = r#"46threevqs8114

@@ -1,11 +1,11 @@
 pub fn sum_of_all_of_the_calibration_values(s: &str) -> u64 {
     s.lines()
         .filter_map(|s| {
-            s.find(&DIGITS)
+            s.find(DIGITS)
                 .and_then(|idx| s.chars().nth(idx))
                 .map(|ch| (ch as u32) - ZERO_CHAR_CODE)
                 .and_then(|tens| {
-                    s.rfind(&DIGITS)
+                    s.rfind(DIGITS)
                         .and_then(|idx| s.chars().nth(idx))
                         .map(|ch| {
                             let units = (ch as u32) - ZERO_CHAR_CODE;
